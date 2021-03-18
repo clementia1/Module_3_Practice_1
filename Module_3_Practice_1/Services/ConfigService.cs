@@ -29,14 +29,11 @@ namespace Module_3_Practice_1.Services
             }
         }
 
-        public Config GetConfig()
-        {
-            return _config;
-        }
+        public Config GetConfig() => _config;
 
         public void ReadConfigJson(string filepath)
         {
-            var text = File.ReadAllText(filepath);
+            var text = File.ReadAllText(filepath, Encoding.UTF8);
             _config = JsonConvert.DeserializeObject<Config>(text);
         }
     }
