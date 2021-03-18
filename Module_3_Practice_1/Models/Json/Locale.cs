@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace Module_3_Practice_1.Config
+namespace Module_3_Practice_1.Models.Json
 {
     public class Locale
     {

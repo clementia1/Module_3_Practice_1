@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Module_3_Practice_1.Config
+namespace Module_3_Practice_1.Models.Json
 {
     public class Config
     {
