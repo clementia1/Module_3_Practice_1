@@ -33,7 +33,8 @@ namespace Module_3_Practice_1.Services
 
         public void ReadConfigJson(string filepath)
         {
-            var text = File.ReadAllText(filepath, Encoding.UTF8);
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            var text = File.ReadAllText(filepath, Encoding.GetEncoding("windows-1251"));
             _config = JsonConvert.DeserializeObject<Config>(text);
         }
     }

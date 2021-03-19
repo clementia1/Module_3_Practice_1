@@ -11,7 +11,7 @@ namespace Module_3_Practice_1
         where T : IContact
     {
         private readonly SortedDictionary<string, List<IContact>> _contacts;
-        private readonly string[] _specialGroups;
+        private readonly string[] _specialGroups = new[] { "0-9", "#" };
         private CultureInfo _currentCulture;
         private string _currentCultureAlphabet;
         private CultureService _cultureService;
@@ -20,7 +20,7 @@ namespace Module_3_Practice_1
         {
             _contacts = new SortedDictionary<string, List<IContact>>();
             _cultureService = new CultureService();
-            _specialGroups = new[] { "0-9", "#" };
+            CreateSpecialContactGroups();
             SetCulture(culture);
         }
 
@@ -29,18 +29,34 @@ namespace Module_3_Practice_1
         {
         }
 
-        public void Add(IContact contact)
-        {
-            var contactKey = contact.FirstName[0].ToString();
+        public SortedDictionary<string, List<IContact>> GetContacts() => _contacts;
 
-            if (_contacts.ContainsKey(contactKey))
+        public void AddContact(IContact contact)
+        {
+            var firstSymbol = contact.FullName[0].ToString();
+
+            if (_contacts.ContainsKey(firstSymbol))
             {
-                _contacts[contactKey].Add(contact);
+                _contacts[firstSymbol].Add(contact);
             }
             else
             {
-                _contacts.Add(contactKey, new List<IContact>());
-                _contacts[contactKey].Add(contact);
+                if (IsNumeric(firstSymbol))
+                {
+                    _contacts["0-9"].Add(contact);
+                }
+                else
+                {
+                    if (_cultureService.IsCultureLetter(_currentCultureAlphabet, firstSymbol))
+                    {
+                        _contacts.Add(firstSymbol, new List<IContact>());
+                        _contacts[firstSymbol].Add(contact);
+                    }
+                    else
+                    {
+                        _contacts["#"].Add(contact);
+                    }
+                }
             }
         }
 
@@ -56,10 +72,7 @@ namespace Module_3_Practice_1
             }
 
             _currentCultureAlphabet = _cultureService.GetSupportedCultures()[_currentCulture.Name];
-        }
-
-        public void SortAlphabeticallyAscending()
-        {
+            ReorderContactsByCurrentCulture();
         }
 
         private void CreateSpecialContactGroups()
@@ -72,12 +85,36 @@ namespace Module_3_Practice_1
 
         private void ReorderContactsByCurrentCulture()
         {
-            foreach (var item in _contacts)
+            for (int i = _contacts["#"].Count - 1; i >= 0; i--)
             {
-                if (_cultureService.IsCultureLetter(_currentCultureAlphabet, item.Key))
+                var item = _contacts["#"][i];
+                var firstSymbol = item.FullName[0].ToString();
+                if (_cultureService.IsCultureLetter(_currentCultureAlphabet, firstSymbol))
                 {
+                    AddContact(item);
+                    _contacts["#"].Remove(item);
                 }
             }
+
+            List<string> contactGroups = new List<string>(_contacts.Keys);
+
+            foreach (var group in contactGroups)
+            {
+                if (Array.IndexOf(_specialGroups, group) == -1)
+                {
+                    if (!_cultureService.IsCultureLetter(_currentCultureAlphabet, group))
+                    {
+                        _contacts["#"].AddRange(_contacts[group]);
+                        _contacts.Remove(group);
+                    }
+                }
+            }
+        }
+
+        private bool IsNumeric(string letter)
+        {
+            int result;
+            return int.TryParse(letter, out result);
         }
     }
 }

@@ -16,13 +16,9 @@ namespace Module_3_Practice_1.Services
             _configService = new ConfigService("config.json");
         }
 
-        public void IsCultureCodeValid()
-        {
-        }
-
         public bool IsCultureLetter(string cultureAlphabet, string letter)
         {
-            if (cultureAlphabet.IndexOf(letter) != -1)
+            if (cultureAlphabet.ToLower().IndexOf(letter.ToLower()) != -1)
             {
                 return true;
             }

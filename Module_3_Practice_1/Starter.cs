@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Globalization;
 using Module_3_Practice_1.Services;
+using Module_3_Practice_1.Services.Abstractions;
+using Module_3_Practice_1.Models;
 
 namespace Module_3_Practice_1
 {
@@ -10,13 +12,37 @@ namespace Module_3_Practice_1
     {
         public void Run()
         {
-            var configService = new ConfigService("config.json");
+            var phonebook = new PhoneBook<IContact>();
+            var contactFactory = new ContactFactory();
+            phonebook.AddContact(new Contact("Роман", "Сердюк"));
+            phonebook.AddContact(new Contact("Сергей", "Александров"));
+            phonebook.AddContact(new Contact("Сергей", "Иванов"));
+            phonebook.AddContact(new Contact("Максим", "Орленко"));
+            phonebook.AddContact(new Contact("Геннадий", "Беспалов"));
 
-            var config = configService.GetConfig();
-            Console.OutputEncoding = Encoding.UTF8;
+            phonebook.AddContact(new Contact("Ihor", "Vetkin"));
+            phonebook.AddContact(new Contact("Julia", "Romanova"));
+            phonebook.AddContact(new Contact("Irina", "Kozak"));
 
-            CultureInfo culture1 = CultureInfo.CurrentCulture;
-            Console.WriteLine(culture1.Name);
+            phonebook.AddContact(contactFactory.CreateContactPhoneNumberOnly("0931232893"));
+
+            foreach (var item in phonebook.GetContacts())
+            {
+                foreach (var elem in phonebook.GetContacts()[item.Key])
+                {
+                    Console.WriteLine($"{item.Key}: {elem.FullName}");
+                }
+            }
+
+            phonebook.SetCulture(new CultureInfo("ru-RU"));
+
+            foreach (var item in phonebook.GetContacts())
+            {
+                foreach (var elem in phonebook.GetContacts()[item.Key])
+                {
+                    Console.WriteLine($"{item.Key}: {elem.FullName}");
+                }
+            }
         }
     }
 }
