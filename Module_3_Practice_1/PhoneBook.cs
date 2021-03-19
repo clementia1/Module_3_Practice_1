@@ -70,7 +70,7 @@ namespace Module_3_Practice_1
             }
         }
 
-        private void ReorderContactGroups()
+        private void ReorderContactsByCurrentCulture()
         {
             foreach (var item in _contacts)
             {
