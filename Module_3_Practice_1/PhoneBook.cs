@@ -26,7 +26,7 @@ namespace Module_3_Practice_1
         }
 
         public PhoneBook()
-            : this(new CultureInfo("en-US"))
+            : this(CultureInfo.CurrentCulture)
         {
         }
 
