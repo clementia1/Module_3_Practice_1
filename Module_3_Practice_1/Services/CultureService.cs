@@ -20,9 +20,9 @@ namespace Module_3_Practice_1.Services
         {
         }
 
-        public bool IsLanguageLetter(string languageLetters, string letter)
+        public bool IsCultureLetter(string cultureAlphabet, string letter)
         {
-            if (languageLetters.IndexOf(letter) != -1)
+            if (cultureAlphabet.IndexOf(letter) != -1)
             {
                 return true;
             }
@@ -34,7 +34,7 @@ namespace Module_3_Practice_1.Services
 
         public bool IsCultureSupported(CultureInfo culture)
         {
-            var supportedCultures = _configService.GetConfig().SupportedCultures;
+            var supportedCultures = GetSupportedCultures();
 
             if (supportedCultures.ContainsKey(culture.Name))
             {
@@ -44,6 +44,11 @@ namespace Module_3_Practice_1.Services
             {
                 return false;
             }
+        }
+
+        public Dictionary<string, string> GetSupportedCultures()
+        {
+            return _configService.GetConfig().SupportedCultures;
         }
     }
 }

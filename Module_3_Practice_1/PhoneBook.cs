@@ -10,17 +10,18 @@ namespace Module_3_Practice_1
     public class PhoneBook<T>
         where T : IContact
     {
-        private readonly Dictionary<string, List<IContact>> _contacts;
+        private readonly SortedDictionary<string, List<IContact>> _contacts;
+        private readonly string[] _specialGroups;
         private CultureInfo _currentCulture;
         private string _currentCultureAlphabet;
-        private ConfigService _configService;
+        private CultureService _cultureService;
 
-        public PhoneBook(CultureInfo locale)
+        public PhoneBook(CultureInfo culture)
         {
-            _contacts = new Dictionary<string, List<IContact>>();
-            _currentCulture = locale;
-            _configService = new ConfigService("config.json");
-            _currentCultureAlphabet = _configService.GetConfig().SupportedCultures[_currentCulture.Name];
+            _contacts = new SortedDictionary<string, List<IContact>>();
+            _cultureService = new CultureService();
+            _specialGroups = new[] { "0-9", "#" };
+            SetCulture(culture);
         }
 
         public PhoneBook()
@@ -43,31 +44,40 @@ namespace Module_3_Practice_1
             }
         }
 
-        public void ChangeCulture(CultureInfo culture)
+        public void SetCulture(CultureInfo culture)
         {
-            _currentCulture = culture;
+            if (_cultureService.IsCultureSupported(culture))
+            {
+                _currentCulture = culture;
+            }
+            else
+            {
+                _currentCulture = new CultureInfo("en-US");
+            }
+
+            _currentCultureAlphabet = _cultureService.GetSupportedCultures()[_currentCulture.Name];
         }
 
         public void SortAlphabeticallyAscending()
         {
         }
 
-        public bool IsLocaleLetter(string letter)
+        private void CreateSpecialContactGroups()
         {
-            if (_currentCultureAlphabet.IndexOf(letter) != -1)
+            foreach (var item in _specialGroups)
             {
-                return true;
-            }
-            else
-            {
-                return false;
+                _contacts.Add(item, new List<IContact>());
             }
         }
 
-        public void CreateAdditionalGroups()
+        private void ReorderContactGroups()
         {
-            _contacts.Add("#", new List<IContact>());
-            _contacts.Add("0-9", new List<IContact>());
+            foreach (var item in _contacts)
+            {
+                if (_cultureService.IsCultureLetter(_currentCultureAlphabet, item.Key))
+                {
+                }
+            }
         }
     }
 }
