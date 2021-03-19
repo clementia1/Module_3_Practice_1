@@ -4,6 +4,7 @@ using System.Text;
 using System.Globalization;
 using Module_3_Practice_1.Services;
 using Module_3_Practice_1.Services.Abstractions;
+using Module_3_Practice_1.Helpers.Extensions;
 
 namespace Module_3_Practice_1
 {
@@ -41,7 +42,7 @@ namespace Module_3_Practice_1
             }
             else
             {
-                if (IsNumeric(firstSymbol))
+                if (firstSymbol.IsNumeric())
                 {
                     _contacts["0-9"].Add(contact);
                 }
@@ -109,12 +110,6 @@ namespace Module_3_Practice_1
                     }
                 }
             }
-        }
-
-        private bool IsNumeric(string letter)
-        {
-            int result;
-            return int.TryParse(letter, out result);
         }
     }
 }
