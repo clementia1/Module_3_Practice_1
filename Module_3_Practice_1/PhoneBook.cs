@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Globalization;
 using Module_3_Practice_1.Services;
 using Module_3_Practice_1.Services.Abstractions;
 
@@ -10,20 +11,21 @@ namespace Module_3_Practice_1
         where T : IContact
     {
         private readonly Dictionary<string, List<IContact>> _contacts;
-        private string _currentLocale;
+        private CultureInfo _currentCulture;
+        private string _currentCultureAlphabet;
         private ConfigService _configService;
 
-        public PhoneBook(string locale)
+        public PhoneBook(CultureInfo locale)
         {
-            _currentLocale = locale;
+            _contacts = new Dictionary<string, List<IContact>>();
+            _currentCulture = locale;
             _configService = new ConfigService("config.json");
-            /*_currentLocaleAlphabet = _configService.GetConfig().Locale;*/
+            _currentCultureAlphabet = _configService.GetConfig().SupportedCultures[_currentCulture.Name];
         }
 
         public PhoneBook()
-            : this("en-US")
+            : this(new CultureInfo("en-US"))
         {
-            _contacts = new Dictionary<string, List<IContact>>();
         }
 
         public void Add(IContact contact)
@@ -41,21 +43,31 @@ namespace Module_3_Practice_1
             }
         }
 
-        public void ChangeLocale(string locale)
+        public void ChangeCulture(CultureInfo culture)
         {
-            _currentLocale = locale;
+            _currentCulture = culture;
         }
 
         public void SortAlphabeticallyAscending()
         {
         }
 
-/*        public void IsLocaleLetter(string letter)
+        public bool IsLocaleLetter(string letter)
         {
-            if (_currentLocale.IndexOf(letter) )
+            if (_currentCultureAlphabet.IndexOf(letter) != -1)
             {
-
+                return true;
             }
-        }*/
+            else
+            {
+                return false;
+            }
+        }
+
+        public void CreateAdditionalGroups()
+        {
+            _contacts.Add("#", new List<IContact>());
+            _contacts.Add("0-9", new List<IContact>());
+        }
     }
 }

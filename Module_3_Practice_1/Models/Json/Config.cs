@@ -6,6 +6,6 @@ namespace Module_3_Practice_1.Models.Json
 {
     public class Config
     {
-        public Dictionary<string, string> Locale { get; set; }
+        public Dictionary<string, string> SupportedCultures { get; set; }
     }
 }

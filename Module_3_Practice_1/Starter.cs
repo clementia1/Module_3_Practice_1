@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Globalization;
 using Module_3_Practice_1.Services;
 
 namespace Module_3_Practice_1
@@ -14,10 +15,8 @@ namespace Module_3_Practice_1
             var config = configService.GetConfig();
             Console.OutputEncoding = Encoding.UTF8;
 
-            foreach (var item in config.Locale)
-            {
-                Console.WriteLine($"{item.Key}: {item.Value}");
-            }
+            CultureInfo culture1 = CultureInfo.CurrentCulture;
+            Console.WriteLine(culture1.Name);
         }
     }
 }
