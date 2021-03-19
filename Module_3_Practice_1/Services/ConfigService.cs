@@ -4,10 +4,11 @@ using System.IO;
 using System.Text;
 using Newtonsoft.Json;
 using Module_3_Practice_1.Models.Json;
+using Module_3_Practice_1.Services.Abstractions;
 
 namespace Module_3_Practice_1.Services
 {
-    public class ConfigService
+    public class ConfigService : IConfigService
     {
         private Config _config;
         private string _configFilePath;
